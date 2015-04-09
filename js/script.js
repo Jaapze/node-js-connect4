@@ -10,8 +10,12 @@ $(function(){
 		player.hash = data.hash;
 		if(player.pid == "1"){
 			yc.addClass('red');
+			player.color = 'red';
+			player.oponend = 'yellow';
 		}else{
 			yc.addClass('yellow');
+			player.color = 'yellow';
+			player.oponend = 'red';
 		}
 	});
 
@@ -26,16 +30,31 @@ $(function(){
 		console.log('Other player left the game');
 	});
 
-	$('.cell').mouseenter(function(){
+	$('.cols > .col').mouseenter(function(){
 		yc.css('left', $(this).index()*100);
 	});
 
-	$('.cell').click(function(){
+	$('.cols > .col').click(function(){
 		if(!yc.hasClass('hidden')){
 			var col = $(this).index()+1;
+			make_move(col);
 			socket.emit('makeMove', {col: col-1});
-			
 		}
 	});
+
+	function make_move(col, other){
+		if(!other) other = false;
+		var col_elm = $('.cols > .col#col_'+col);
+		var current_in_col = parseInt(col_elm.attr('data-in-col'));
+		col_elm.attr('data-in-col', current_in_col+1);
+		var color = (other) ? player.oponend : player.color;
+		var new_coin = $('<div class="coin '+color+'"></div>');
+		col_elm.append(new_coin);
+		new_coin.animate({
+			top : 100*(4-current_in_col+1),
+		}, 400, function() {
+		
+		});
+	}
 
 });

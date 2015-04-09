@@ -2,11 +2,16 @@ body{
 	background: #f2f2f2;
 }
 
+.board{
+	width: 700px;
+	height: 600px;
+}
+
 .game{
 	position: relative;
 	width: 700px;
 	margin: 100px auto 0;
-	background: #5297FF;
+	background: #00658F;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
@@ -15,38 +20,49 @@ body{
 	box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
 }
 
-.row{
-	height: 100px;
-	width: 100%;
-	clear: both;
-}
-
-.row > .cell{
-	width: 80px;
-	height: 80px;
-	margin: 10px;
-	border: 1px solid #4686E7;
-	background: #91BDFF;
-	box-sizing: border-box;
-	float: left;
-	-webkit-border-radius: 40px;
-	-moz-border-radius: 40px;
-	border-radius: 40px;
-	-webkit-box-shadow: inset 0px 0px 29px -2px rgba(0,0,0,0.20);
-	-moz-box-shadow: inset 0px 0px 29px -2px rgba(0,0,0,0.20);
-	box-shadow: inset 0px 0px 29px -2px rgba(0,0,0,0.20);
-}
-
 .your_color{
 	position: absolute;
 	top: -90px;
-	margin-left: 10px;
-	width: 80px;
-	height: 80px;
-	-webkit-border-radius: 40px;
-	-moz-border-radius: 40px;
-	border-radius: 40px;
+	margin-left: 5px;
+	width: 90px;
+	height: 90px;
+	-webkit-border-radius: 45px;
+	-moz-border-radius: 45px;
+	border-radius: 45px;
 	background: #000;
+}
+
+.board .overlay{
+	position: absolute;
+	z-index: 10000;
+	left: 0;
+	top: 0;
+	pointer-events: none;
+}
+
+.cols{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 1000;
+}
+
+.cols > .col{
+	position: relative;
+	float: left;
+	width: 100px;
+	height: 100%;
+}
+
+.coin{
+	position: absolute;
+	left: 5px;
+	margin-top: 5px;
+	width: 90px;
+	height: 90px;
+	-webkit-border-radius: 45px;
+	-moz-border-radius: 45px;
+	border-radius: 45px;
 }
 
 .red{
