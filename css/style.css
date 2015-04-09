@@ -1,16 +1,11 @@
 body{
 	background: #f2f2f2;
+	font-family: arial;
 }
 
 .board{
 	width: 700px;
 	height: 600px;
-}
-
-.game{
-	position: relative;
-	width: 700px;
-	margin: 120px auto 0;
 	background: #00658F;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -18,6 +13,33 @@ body{
 	-webkit-box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
 	-moz-box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
 	box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+}
+
+.game{
+	position: relative;
+	width: 700px;
+	margin: 120px auto 0;
+}
+
+.under{
+	position: absolute;
+	bottom: -100px;
+	height: 100px;
+	width: 100%;
+}
+.under .status{
+	font-size: 20px;
+	line-height: 2em;
+	text-align: center;
+	width: 100%;
+}
+.under input{
+	margin: 0 150px;
+	width: 400px;
+	line-height: 2em;
+	font-size: 16px;
+	box-sizing: border-box;
+	padding: 0 10px;
 }
 
 .your_color{

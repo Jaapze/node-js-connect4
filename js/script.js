@@ -6,6 +6,7 @@ $(function(){
 	url = window.location.href.split('/'),
 	room = url[url.length-1];
 
+	init();
 	socket.emit('join', {room: room});
 
 	socket.on('assign', function(data) {
@@ -23,8 +24,8 @@ $(function(){
 	});
 
 	socket.on('start', function(data) {
-		console.debug('GO');
 		your_turn = true;
+		$('.under .status').html('Tegenstander is aanwezig');
 	});
 
 	socket.on('stop', function(data) {
@@ -69,6 +70,11 @@ $(function(){
 		new_coin.animate({
 			top : 100*(4-current_in_col+1),
 		}, 400);
+	}
+
+	function init(){
+		$('.under input').val(window.location.href);
+		$('.under .status').html('Wachten op een tegenstander');
 	}
 
 });

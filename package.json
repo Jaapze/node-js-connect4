@@ -1,0 +1,25 @@
+{
+  "name": "node-js-connect4",
+  "version": "1.0.0",
+  "description": "Test with node",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.12.3",
+    "socket.io": "^1.3.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atticweb/node-js-connect4.git"
+  },
+  "author": "atticweb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/atticweb/node-js-connect4/issues"
+  },
+  "homepage": "https://github.com/atticweb/node-js-connect4"
+}
