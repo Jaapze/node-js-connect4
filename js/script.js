@@ -1,10 +1,12 @@
 $(function(){
-	var socket = io.connect();
-	var player = {};
-	var yc = $('.your_color');
-	var your_turn = false;
+	var socket = io.connect(),
+	player = {},
+	yc = $('.your_color'),
+	your_turn = false,
+	url = window.location.href.split('/'),
+	room = url[url.length-1];
 
-	socket.emit('join', {room: 'test12'});
+	socket.emit('join', {room: room});
 
 	socket.on('assign', function(data) {
 		player.pid = data.pid;
@@ -26,7 +28,7 @@ $(function(){
 	});
 
 	socket.on('stop', function(data) {
-		socket.emit('join', {room: 'test12'});
+		socket.emit('join', {room: room});
 		console.log('Other player left the game');
 	});
 
