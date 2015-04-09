@@ -1,5 +1,5 @@
 # node-js-connect4
-Multiplayer connect 4 build with node js
+Multiplayer connect 4 build with node js. It's just a test to learn Node
 
 ## startup command
 ```
