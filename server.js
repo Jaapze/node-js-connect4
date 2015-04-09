@@ -35,7 +35,9 @@ function generateHash(length) {
 
 function check_for_win(board){
 	var found = 0,
+		winner_coins = [],
 		winner = false,
+		data = {},
 		person = 0;
 	/*horizontal*/
 	for(var row = 0; row < board.length; row++){
@@ -46,7 +48,12 @@ function check_for_win(board){
 			var selected = board[row][col];
 			if(selected !== 0) found = (person != selected) ? 1 : found + 1;
 			person = selected;
-			if(found >= 4) winner = person;
+			if(found >= 4){
+				winner = person;
+				for(var k = 0; k < 4; k++){
+					winner_coins[k] = row+''+(col-k);
+				}
+			}
 			if((col > 2 && found == 0) || found >= 4) break;
 		}
 	}
@@ -60,8 +67,13 @@ function check_for_win(board){
 				var selected = board[row][col];
 				if(selected !== 0) found = (person != selected) ? 1 : found + 1;
 				person = selected;
-				if(found >= 4) winner = person;
-				if((col > 1 && found == 0) || found >= 4) break;
+				if(found >= 4){
+					winner = person;
+					for(var k = 0; k < 4; k++){
+						winner_coins[k] = (row-k)+''+col;
+					}
+				}
+				if((row > 1 && found == 0) || found >= 4) break;
 			}
 		}
 	}
@@ -76,6 +88,7 @@ function check_for_win(board){
 					first_val === board[row+2][col+2] &&
 					first_val === board[row+3][col+3] ){
 					winner = first_val;
+					winner_coins = [row+''+col,(row+1)+''+(col+1),(row+2)+''+(col+2),(row+3)+''+(col+3)];
 					break;
 				}
 			}
@@ -92,14 +105,17 @@ function check_for_win(board){
 					first_val === board[row+2][col-2] &&
 					first_val === board[row+3][col-3] ){
 					winner = first_val;
+					winner_coins = [row+''+col,(row+1)+''+(col-1),(row+2)+''+(col-2),(row+3)+''+(col-3)];
 					break;
 				}
 			}
 		}
 	}
-
+	
 	if(winner) {
-		return winner;
+		data.winner = winner;
+		data.winner_coins = winner_coins;
+		return data;
 	}
 	return false;
 }
@@ -134,7 +150,7 @@ io.sockets.on('connection', function(socket){
 			games[data.room].player1.opponent = socket;
 			socket.emit('assign', {pid: socket.pid, hash: socket.hash});
 			games[data.room].turn = 1;
-			io.to(data.room).emit('start');
+			socket.broadcast.to(data.room).emit('start');
 		}else{
 			console.log('player 1 logged on');
 			socket.join(data.room);
@@ -154,7 +170,11 @@ io.sockets.on('connection', function(socket){
 		}
 
 		socket.on('makeMove', function(data){
-			make_move(games[socket.room].board, data.col, socket.pid);
+			if(data.hash = socket.hash && games[socket.room].turn == socket.pid){
+				make_move(games[socket.room].board, data.col, socket.pid);
+				socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
+				games[socket.room].turn = socket.opponent.pid;
+			}
 			console.log(games[socket.room].board);
 			console.log(check_for_win(games[socket.room].board));
 		});

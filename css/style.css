@@ -10,7 +10,7 @@ body{
 .game{
 	position: relative;
 	width: 700px;
-	margin: 100px auto 0;
+	margin: 120px auto 0;
 	background: #00658F;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -22,7 +22,7 @@ body{
 
 .your_color{
 	position: absolute;
-	top: -90px;
+	top: -100px;
 	margin-left: 5px;
 	width: 90px;
 	height: 90px;
@@ -30,6 +30,11 @@ body{
 	-moz-border-radius: 45px;
 	border-radius: 45px;
 	background: #000;
+	opacity: 0;
+}
+
+.your_color.show{
+	opacity: 1;
 }
 
 .board .overlay{
