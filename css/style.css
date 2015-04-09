@@ -1,0 +1,61 @@
+body{
+	background: #f2f2f2;
+}
+
+.game{
+	position: relative;
+	width: 700px;
+	margin: 100px auto 0;
+	background: #5297FF;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+	box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+}
+
+.row{
+	height: 100px;
+	width: 100%;
+	clear: both;
+}
+
+.row > .cell{
+	width: 80px;
+	height: 80px;
+	margin: 10px;
+	border: 1px solid #4686E7;
+	background: #91BDFF;
+	box-sizing: border-box;
+	float: left;
+	-webkit-border-radius: 40px;
+	-moz-border-radius: 40px;
+	border-radius: 40px;
+	-webkit-box-shadow: inset 0px 0px 29px -2px rgba(0,0,0,0.20);
+	-moz-box-shadow: inset 0px 0px 29px -2px rgba(0,0,0,0.20);
+	box-shadow: inset 0px 0px 29px -2px rgba(0,0,0,0.20);
+}
+
+.your_color{
+	position: absolute;
+	top: -90px;
+	margin-left: 10px;
+	width: 80px;
+	height: 80px;
+	-webkit-border-radius: 40px;
+	-moz-border-radius: 40px;
+	border-radius: 40px;
+	background: #000;
+}
+
+.red{
+	background: #EE2121;
+}
+.yellow{
+	background: #F6E851;
+}
+
+.hidden{
+	display: none;
+}
