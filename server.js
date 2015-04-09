@@ -13,7 +13,11 @@ app.use("/js", express.static(__dirname + '/js'));
 app.use("/img", express.static(__dirname + '/img'));
 
 app.get('/', function(req, res){
-	res.sendFile(__dirname+'/index.html');
+	res.writeHead(302, {
+		'Location': '/'+generateHash(6)
+	});
+	res.end();
+	/*res.sendFile(__dirname+'/index.html');*/
 })
 
 app.get('/:room([A-Za-z0-9]{6})', function(req, res) {
