@@ -178,9 +178,11 @@ io.sockets.on('connection', function(socket){
 				make_move(games[socket.room].board, data.col, socket.pid);
 				socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
 				games[socket.room].turn = socket.opponent.pid;
+
+				if(check_for_win(games[socket.room].board)){
+					console.log('Someone wins the game');
+				}
 			}
-			console.log(games[socket.room].board);
-			console.log(check_for_win(games[socket.room].board));
 		});
 
 		socket.on('disconnect', function () {
