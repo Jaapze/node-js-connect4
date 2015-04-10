@@ -2,6 +2,7 @@ $(function(){
 	var socket = io.connect(),
 	player = {},
 	yc = $('.your_color'),
+	oc = $('.opponent_color'),
 	your_turn = false,
 	url = window.location.href.split('/'),
 	room = url[url.length-1];
@@ -26,6 +27,7 @@ $(function(){
 		player.hash = data.hash;
 		if(player.pid == "1"){
 			yc.addClass('red');
+			oc.addClass('yellow');
 			player.color = 'red';
 			player.oponend = 'yellow';
 			$('.underlay').removeClass('hidden');
@@ -33,12 +35,16 @@ $(function(){
 		}else{
 			$('.status').html(text.nyt);
 			yc.addClass('yellow');
+			oc.addClass('red');
+			oc.addClass('show');
 			player.color = 'yellow';
 			player.oponend = 'red';
 		}
 	});
 
 	socket.on('winner', function(data) {
+		oc.removeClass('show');
+		yc.removeClass('show');
 		change_turn(false);
 		for(var i = 0; i < 4; i++){
 			$('.cols .col .coin#coin_'+data.winner.winner_coins[i]).addClass('winner_coin');
@@ -59,6 +65,8 @@ $(function(){
 	});
 
 	socket.on('draw', function() {
+		oc.removeClass('show');
+		yc.removeClass('show');
 		change_turn(false);
 		$('.popover h2').html(text.popover_h2_draw);
 		$('.popover p').html(text.popover_p_draw);
@@ -84,10 +92,21 @@ $(function(){
 		make_move(data.col+1, true);
 		change_turn(true);
 		yc.addClass('show');
+		oc.removeClass('show');
+	});
+
+	socket.on('opponent_move', function(data) {
+		if(!your_turn){
+			oc.css('left', parseInt(data.col)*100);
+		}
+		console.debug(data);
 	});
 
 	$('.cols > .col').mouseenter(function(){
-		if(your_turn) yc.css('left', $(this).index()*100);
+		if(your_turn){
+			yc.css('left', $(this).index()*100);
+			socket.emit('my_move', {col: $(this).index()});
+		}
 	});
 
 	$('.cols > .col').click(function(){
@@ -98,6 +117,7 @@ $(function(){
 				socket.emit('makeMove', {col: col-1, hash: player.hash});
 				change_turn(false);
 				yc.removeClass('show');
+				oc.addClass('show');
 			}
 		}
 	});
@@ -126,7 +146,9 @@ $(function(){
 	function reset_board(){
 		$('.cols .col').attr('data-in-col', '0').html('');
 		yc.removeClass('yellow red');
+		oc.removeClass('yellow red');
 		yc.removeClass('show');
+		oc.removeClass('show');
 	}
 
 	function change_turn(yt){

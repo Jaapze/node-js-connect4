@@ -38,6 +38,23 @@ body{
 	opacity: 1;
 }
 
+.opponent_color{
+	position: absolute;
+	top: -100px;
+	margin-left: 5px;
+	width: 90px;
+	height: 90px;
+	-webkit-border-radius: 45px;
+	-moz-border-radius: 45px;
+	border-radius: 45px;
+	background: #000;
+	opacity: 0;
+}
+
+.opponent_color.show{
+	opacity: .3;
+}
+
 .board .overlay{
 	position: absolute;
 	z-index: 100;

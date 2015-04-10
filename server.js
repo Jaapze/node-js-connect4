@@ -191,6 +191,10 @@ io.sockets.on('connection', function(socket){
 			}
 		});
 
+		socket.on('my_move', function(data){
+			socket.broadcast.to(socket.room).emit('opponent_move', {col: data.col});
+		})
+
 		socket.on('disconnect', function () {
 			if(socket.room in games){
 				delete games[socket.room];
