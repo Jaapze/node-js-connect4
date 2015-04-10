@@ -175,16 +175,18 @@ io.sockets.on('connection', function(socket){
 
 		socket.on('makeMove', function(data){
 			if(data.hash = socket.hash && games[socket.room].turn == socket.pid){
-				games[socket.room].moves = parseInt(games[socket.room].moves)+1;
-				make_move(games[socket.room].board, data.col, socket.pid);
-				socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
-				games[socket.room].turn = socket.opponent.pid;
-				var winner = check_for_win(games[socket.room].board);
-				if(winner){
-					io.to(socket.room).emit('winner', {winner: winner});
-				}
-				if(games[socket.room].moves >= 42){
-					io.to(socket.room).emit('draw');
+				var move_made = make_move(games[socket.room].board, data.col, socket.pid);
+				if(move_made){
+					games[socket.room].moves = parseInt(games[socket.room].moves)+1;
+					socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
+					games[socket.room].turn = socket.opponent.pid;
+					var winner = check_for_win(games[socket.room].board);
+					if(winner){
+						io.to(socket.room).emit('winner', {winner: winner});
+					}
+					if(games[socket.room].moves >= 42){
+						io.to(socket.room).emit('draw');
+					}
 				}
 			}
 		});
