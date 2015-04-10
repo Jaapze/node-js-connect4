@@ -162,6 +162,7 @@ io.sockets.on('connection', function(socket){
 			socket.hash = generateHash(8);
 			games[data.room] = {
 				player1: socket,
+				moves: 0,
 				board: [[0,0,0,0,0,0,0],
 						[0,0,0,0,0,0,0],
 						[0,0,0,0,0,0,0],
@@ -174,14 +175,16 @@ io.sockets.on('connection', function(socket){
 
 		socket.on('makeMove', function(data){
 			if(data.hash = socket.hash && games[socket.room].turn == socket.pid){
+				games[socket.room].moves = parseInt(games[socket.room].moves)+1;
 				make_move(games[socket.room].board, data.col, socket.pid);
 				socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
 				games[socket.room].turn = socket.opponent.pid;
-
 				var winner = check_for_win(games[socket.room].board);
 				if(winner){
-					console.log(winner);
 					io.to(socket.room).emit('winner', {winner: winner});
+				}
+				if(games[socket.room].moves >= 42){
+					io.to(socket.room).emit('draw');
 				}
 			}
 		});

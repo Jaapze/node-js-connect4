@@ -13,8 +13,10 @@ $(function(){
 		'popover_p' : "Give the url to a friend to play a game",
 		'popover_h2_win' : "You won the game!",
 		'popover_p_win' : "Give the url to a friend to play another game",
-		'popover_h2_lose' : "You lost the game",
+		'popover_h2_lose' : "You lost the game..",
 		'popover_p_lose' : "Give the url to a friend to play another game",
+		'popover_h2_draw' : "Its a draw.. bummer!",
+		'popover_p_draw' : "Give the url to a friend to play another game",
 	}
 
 	init();
@@ -41,7 +43,8 @@ $(function(){
 		for(var i = 0; i < 4; i++){
 			$('.cols .col .coin#coin_'+data.winner.winner_coins[i]).addClass('winner_coin');
 		}
-		if(player.pid == data.winner.winner){
+
+		if(data.winner.winner == player.pid){
 			$('.popover h2').html(text.popover_h2_win);
 			$('.popover p').html(text.popover_p_win);
 		}else{
@@ -49,6 +52,16 @@ $(function(){
 			$('.popover p').html(text.popover_p_lose);
 		}
 		
+		setTimeout(function(){
+			$('.underlay').removeClass('hidden');
+			$('.popover').removeClass('hidden');
+		},2000);
+	});
+
+	socket.on('draw', function() {
+		change_turn(false);
+		$('.popover h2').html(text.popover_h2_draw);
+		$('.popover p').html(text.popover_p_draw);
 		setTimeout(function(){
 			$('.underlay').removeClass('hidden');
 			$('.popover').removeClass('hidden');
@@ -78,12 +91,14 @@ $(function(){
 	});
 
 	$('.cols > .col').click(function(){
-		if(your_turn){
-			var col = $(this).index()+1;
-			make_move(col);
-			socket.emit('makeMove', {col: col-1, hash: player.hash});
-			change_turn(false);
-			yc.removeClass('show');
+		if(parseInt($(this).attr('data-in-col')) < 6){
+			if(your_turn){
+				var col = $(this).index()+1;
+				make_move(col);
+				socket.emit('makeMove', {col: col-1, hash: player.hash});
+				change_turn(false);
+				yc.removeClass('show');
+			}
 		}
 	});
 
