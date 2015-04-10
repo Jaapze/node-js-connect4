@@ -37,6 +37,7 @@ $(function(){
 	});
 
 	socket.on('winner', function(data) {
+		change_turn(false);
 		for(var i = 0; i < 4; i++){
 			$('.cols .col .coin#coin_'+data.winner.winner_coins[i]).addClass('winner_coin');
 		}
