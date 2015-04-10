@@ -61,6 +61,8 @@ body{
 	left: 0;
 	top: 0;
 	pointer-events: none;
+	-webkit-filter: drop-shadow( 5px 5px 5px rgba(0,0,0,0.1));
+	filter: drop-shadow( 5px 5px 5px rgba(0,0,0,0.1));
 }
 
 .cols{
@@ -105,10 +107,10 @@ body{
 }
 
 .red{
-	background: #EE2121;
+	background: #e61;
 }
 .yellow{
-	background: #F6E851;
+	background: #0ba;
 }
 
 .hidden{
@@ -192,4 +194,14 @@ body{
 	text-align: center;
 	line-height: 40px;
 	font-size: 20px;
+	color: #fff;
+	background-color: #e64;
+	border-radius: 0 0 10px 10px;
+}
+
+@media only screen and (max-device-width: 768px) {
+	.game {
+		margin: 120px 0;
+		zoom: 138% !important;
+	}
 }
