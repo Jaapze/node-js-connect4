@@ -21,7 +21,6 @@ app.get('/', function(req, res){
 })
 
 app.get('/:room([A-Za-z0-9]{6})', function(req, res) {
-	console.log('now:'+req.params.room);
 	res.sendFile(__dirname+'/index.html');
 });
 
@@ -156,8 +155,8 @@ io.sockets.on('connection', function(socket){
 			games[data.room].turn = 1;
 			socket.broadcast.to(data.room).emit('start');
 		}else{
-			console.log('player 1 logged on');
-			socket.join(data.room);
+			console.log('player 1 is here');
+			if(socket.rooms.indexOf(data.room) <= 0) socket.join(data.room);
 			socket.room = data.room;
 			socket.pid = 1;
 			socket.hash = generateHash(8);
@@ -186,9 +185,13 @@ io.sockets.on('connection', function(socket){
 		});
 
 		socket.on('disconnect', function () {
-			delete games[socket.room];
-			io.to(socket.room).emit('stop');
-			console.log('room closed: '+socket.room);
+			if(socket.room in games){
+				delete games[socket.room];
+				io.to(socket.room).emit('stop');
+				console.log('room closed: '+socket.room);
+			}else{
+				console.log('disconnect called but nothing happend');
+			}
 		});
 	});
 });

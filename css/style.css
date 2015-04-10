@@ -21,27 +21,6 @@ body{
 	margin: 120px auto 0;
 }
 
-.under{
-	position: absolute;
-	bottom: -100px;
-	height: 100px;
-	width: 100%;
-}
-.under .status{
-	font-size: 20px;
-	line-height: 2em;
-	text-align: center;
-	width: 100%;
-}
-.under input{
-	margin: 0 150px;
-	width: 400px;
-	line-height: 2em;
-	font-size: 16px;
-	box-sizing: border-box;
-	padding: 0 10px;
-}
-
 .your_color{
 	position: absolute;
 	top: -100px;
@@ -61,7 +40,7 @@ body{
 
 .board .overlay{
 	position: absolute;
-	z-index: 10000;
+	z-index: 100;
 	left: 0;
 	top: 0;
 	pointer-events: none;
@@ -71,7 +50,7 @@ body{
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	z-index: 1000;
+	z-index: 10;
 }
 
 .cols > .col{
@@ -101,4 +80,74 @@ body{
 
 .hidden{
 	display: none;
+}
+
+/* overlay with popups */
+
+.underlay{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,.5);
+	z-index: 1000;
+}
+
+.popover{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -200px;
+	margin-top: -150px;
+	box-sizing: border-box;
+	padding: 10px;
+	height: 130px;
+	width: 400px;
+	background: #f2f2f2;
+	z-index: 10000;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+	box-shadow: 0px 10px 43px -16px rgba(0,0,0,0.75);
+}
+
+.popover h2{
+	font-size: 24px;
+	padding: 0;
+	margin: 0;
+	line-height: 1.5em;
+}
+
+.popover p{
+	margin: 0;
+	padding: 0;
+	line-height: 2em;
+}
+
+.popover input{
+	position: absolute;
+	bottom: 10px;
+	width: 330px;
+	line-height: 2em;
+	font-size: 16px;
+	box-sizing: border-box;
+	padding: 0 10px;
+	border: 1px solid #333;
+	outline: none;
+}
+
+.popover button{
+	position: absolute;
+	right: 10px;
+	width: 50px;
+	height: 34px;
+	bottom: 10px;
+	font-size: 16px;
+	background: #333;
+	color: #fff;
+	border: 0;
+	outline: 0;
 }

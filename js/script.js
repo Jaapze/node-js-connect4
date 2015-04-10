@@ -7,7 +7,6 @@ $(function(){
 	room = url[url.length-1];
 
 	init();
-	socket.emit('join', {room: room});
 
 	socket.on('assign', function(data) {
 		player.pid = data.pid;
@@ -16,6 +15,8 @@ $(function(){
 			yc.addClass('red');
 			player.color = 'red';
 			player.oponend = 'yellow';
+			$('.underlay').removeClass('hidden');
+			$('.popover').removeClass('hidden');
 		}else{
 			yc.addClass('yellow');
 			player.color = 'yellow';
@@ -25,28 +26,24 @@ $(function(){
 
 	socket.on('start', function(data) {
 		your_turn = true;
-		$('.under .status').html('Tegenstander is aanwezig');
+		yc.addClass('show');
+		$('.underlay').addClass('hidden');
+		$('.popover').addClass('hidden');
 	});
 
 	socket.on('stop', function(data) {
-		socket.emit('join', {room: room});
-		console.log('Other player left the game');
+		init();
+		reset_board();
 	});
 
 	socket.on('move_made', function(data) {
 		make_move(data.col+1, true);
 		your_turn = true;
+		yc.addClass('show');
 	});
 
 	$('.cols > .col').mouseenter(function(){
-		if(your_turn){
-			yc.addClass('show');
-			yc.css('left', $(this).index()*100);
-		}
-	});
-
-	$('.cols > .col').mouseleave(function(){
-		yc.removeClass('show');
+		if(your_turn) yc.css('left', $(this).index()*100);
 	});
 
 	$('.cols > .col').click(function(){
@@ -73,8 +70,25 @@ $(function(){
 	}
 
 	function init(){
-		$('.under input').val(window.location.href);
-		$('.under .status').html('Wachten op een tegenstander');
+		socket.emit('join', {room: room});
+		$('.popover input').val(window.location.href);
+		$('.popover h2').html('Waiting for opponent');
+		$('.popover p').html('Give the url to a friend to play a game');
 	}
+
+	function reset_board()
+	{
+		$('.cols .col').attr('data-in-col', '0').html('');
+		yc.removeClass('yellow red');
+		yc.removeClass('show');
+	}
+
+	$('.popover button').click(function(){
+		$('.popover input').select();
+	});
+
+	$('.popover input').click(function(){
+		 $(this).select();
+	});
 
 });
