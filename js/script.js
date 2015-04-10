@@ -11,6 +11,10 @@ $(function(){
 		'nyt' : "Waiting for opponent",
 		'popover_h2' : "Waiting for opponent",
 		'popover_p' : "Give the url to a friend to play a game",
+		'popover_h2_win' : "You won the game!",
+		'popover_p_win' : "Give the url to a friend to play another game",
+		'popover_h2_lose' : "You lost the game",
+		'popover_p_lose' : "Give the url to a friend to play another game",
 	}
 
 	init();
@@ -33,10 +37,21 @@ $(function(){
 	});
 
 	socket.on('winner', function(data) {
-		console.debug(data);
 		for(var i = 0; i < 4; i++){
-			$('.cols .col .coin#coin_'+data.winner_coins[i]).addClass('winner_coin');
+			$('.cols .col .coin#coin_'+data.winner.winner_coins[i]).addClass('winner_coin');
 		}
+		if(player.pid == data.winner.winner){
+			$('.popover h2').html(text.popover_h2_win);
+			$('.popover p').html(text.popover_p_win);
+		}else{
+			$('.popover h2').html(text.popover_h2_lose);
+			$('.popover p').html(text.popover_p_lose);
+		}
+		
+		setTimeout(function(){
+			$('.underlay').removeClass('hidden');
+			$('.popover').removeClass('hidden');
+		},2000);
 	});
 
 	socket.on('start', function(data) {

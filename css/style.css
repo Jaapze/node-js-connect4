@@ -60,6 +60,22 @@ body{
 	height: 100%;
 }
 
+@-moz-keyframes blink {0%{opacity:1;} 50%{opacity:.5;} 100%{opacity:1;}}
+@-webkit-keyframes blink {0%{opacity:1;} 50%{opacity:.5;} 100%{opacity:1;}}
+@-ms-keyframes blink {0%{opacity:1;} 50%{opacity:.5;} 100%{opacity:1;}}
+@keyframes blink {0%{opacity:1;} 50%{opacity:.5;} 100%{opacity:1;}}
+.coin.winner_coin{
+	-moz-transition:all 1s ease-in-out;
+	-webkit-transition:all 1s ease-in-out;
+	-o-transition:all 1s ease-in-out;
+	-ms-transition:all 1s ease-in-out;
+	transition:all 1s ease-in-out;
+	-moz-animation:blink normal 1s infinite ease-in-out;
+	-webkit-animation:blink normal 1s infinite ease-in-out;
+	-ms-animation:blink normal 1s infinite ease-in-out;
+	animation:blink normal 1s infinite ease-in-out;
+}
+
 .coin{
 	position: absolute;
 	left: 5px;
