@@ -178,8 +178,10 @@ io.sockets.on('connection', function(socket){
 				socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
 				games[socket.room].turn = socket.opponent.pid;
 
-				if(check_for_win(games[socket.room].board)){
-					console.log('Someone wins the game');
+				var winner = check_for_win(games[socket.room].board);
+				if(winner){
+					console.log(winner);
+					io.to(socket.room).emit('winner', {winner: winner});
 				}
 			}
 		});

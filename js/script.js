@@ -32,6 +32,13 @@ $(function(){
 		}
 	});
 
+	socket.on('winner', function(data) {
+		console.debug(data);
+		for(var i = 0; i < 4; i++){
+			$('.cols .col .coin#coin_'+data.winner_coins[i]).addClass('winner_coin');
+		}
+	});
+
 	socket.on('start', function(data) {
 		change_turn(true);
 		yc.addClass('show');
@@ -70,7 +77,7 @@ $(function(){
 		var current_in_col = parseInt(col_elm.attr('data-in-col'));
 		col_elm.attr('data-in-col', current_in_col+1);
 		var color = (other) ? player.oponend : player.color;
-		var new_coin = $('<div class="coin '+color+'" id="col_'+(5-current_in_col)+''+(col-1)+'"></div>');
+		var new_coin = $('<div class="coin '+color+'" id="coin_'+(5-current_in_col)+''+(col-1)+'"></div>');
 		col_elm.append(new_coin);
 		new_coin.animate({
 			top : 100*(4-current_in_col+1),
