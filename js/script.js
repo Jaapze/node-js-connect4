@@ -6,6 +6,13 @@ $(function(){
 	url = window.location.href.split('/'),
 	room = url[url.length-1];
 
+	var text = {
+		'yt' : "Your turn",
+		'nyt' : "Waiting for opponent",
+		'popover_h2' : "Waiting for opponent",
+		'popover_p' : "Give the url to a friend to play a game",
+	}
+
 	init();
 
 	socket.on('assign', function(data) {
@@ -18,6 +25,7 @@ $(function(){
 			$('.underlay').removeClass('hidden');
 			$('.popover').removeClass('hidden');
 		}else{
+			$('.status').html(text.nyt);
 			yc.addClass('yellow');
 			player.color = 'yellow';
 			player.oponend = 'red';
@@ -25,7 +33,7 @@ $(function(){
 	});
 
 	socket.on('start', function(data) {
-		your_turn = true;
+		change_turn(true);
 		yc.addClass('show');
 		$('.underlay').addClass('hidden');
 		$('.popover').addClass('hidden');
@@ -38,7 +46,7 @@ $(function(){
 
 	socket.on('move_made', function(data) {
 		make_move(data.col+1, true);
-		your_turn = true;
+		change_turn(true);
 		yc.addClass('show');
 	});
 
@@ -51,7 +59,7 @@ $(function(){
 			var col = $(this).index()+1;
 			make_move(col);
 			socket.emit('makeMove', {col: col-1, hash: player.hash});
-			your_turn = false;
+			change_turn(false);
 			yc.removeClass('show');
 		}
 	});
@@ -72,15 +80,25 @@ $(function(){
 	function init(){
 		socket.emit('join', {room: room});
 		$('.popover input').val(window.location.href);
-		$('.popover h2').html('Waiting for opponent');
-		$('.popover p').html('Give the url to a friend to play a game');
+		$('.popover h2').html(text.popover_h2);
+		$('.popover p').html(text.popover_p);
+		$('.status').html('');
 	}
 
-	function reset_board()
-	{
+	function reset_board(){
 		$('.cols .col').attr('data-in-col', '0').html('');
 		yc.removeClass('yellow red');
 		yc.removeClass('show');
+	}
+
+	function change_turn(yt){
+		if(yt){
+			your_turn = true;
+			$('.status').html(text.yt);
+		}else{
+			your_turn = false;
+			$('.status').html(text.nyt);
+		}
 	}
 
 	$('.popover button').click(function(){

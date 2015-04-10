@@ -151,3 +151,12 @@ body{
 	border: 0;
 	outline: 0;
 }
+
+.status{
+	position: absolute;
+	bottom: -40px;
+	width: 100%;
+	text-align: center;
+	line-height: 40px;
+	font-size: 20px;
+}
