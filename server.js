@@ -18,7 +18,6 @@ app.get('/', function(req, res){
 		'Location': '/'+generateHash(6)
 	});
 	res.end();
-	/*res.sendFile(__dirname+'/index.html');*/
 })
 
 app.get('/:room([A-Za-z0-9]{6})', function(req, res) {
@@ -40,7 +39,6 @@ io.sockets.on('connection', function(socket){
 	socket.on('join', function(data){
 		if(data.room in game_logic.games){
 			if(typeof game_logic.games[data.room].player2 != 'undefined'){
-				console.log('second user trys to login');
 				return;
 			}
 			console.log('player 2 logged on');
@@ -75,9 +73,7 @@ io.sockets.on('connection', function(socket){
 
 		socket.on('makeMove', function(data){
 			if(data.hash = socket.hash && game_logic.games[socket.room].turn == socket.pid){
-				console.log(game_logic.games[socket.room].board);
 				var move_made = game_logic.make_move(socket.room, data.col, socket.pid);
-				console.log(game_logic.games[socket.room].board);
 				if(move_made){
 					game_logic.games[socket.room].moves = parseInt(game_logic.games[socket.room].moves)+1;
 					socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
