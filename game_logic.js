@@ -1,4 +1,17 @@
 module.exports = {
+	games : {},
+	make_move : function(room, col, pid){
+		var board = this.games[room].board;
+		var move_made = false;
+		for(var i = board.length-1; i >= 0; i--){
+			if(board[i][col] == 0){
+				board[i][col] = pid;
+				move_made = true;
+				break;
+			}
+		}
+		return move_made;
+	},
 	check_for_win : function(board){
 		var found = 0,
 		winner_coins = [],

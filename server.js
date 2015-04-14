@@ -25,9 +25,6 @@ app.get('/:room([A-Za-z0-9]{6})', function(req, res) {
 	res.sendFile(__dirname+'/index.html');
 });
 
-/*game*/
-var games = {};
-
 function generateHash(length) {
 	var haystack = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
 		output = '';
@@ -38,23 +35,11 @@ function generateHash(length) {
 };
 
 
-function make_move(board, col, pid){
-	var move_made = false;
-	for(var i = board.length-1; i >= 0; i--){
-		if(board[i][col] == 0){
-			board[i][col] = pid;
-			move_made = true;
-			break;
-		}
-	}
-	return move_made;
-}
-
 io.sockets.on('connection', function(socket){
 
 	socket.on('join', function(data){
-		if(data.room in games){
-			if(typeof games[data.room].player2 != 'undefined'){
+		if(data.room in game_logic.games){
+			if(typeof game_logic.games[data.room].player2 != 'undefined'){
 				console.log('second user trys to login');
 				return;
 			}
@@ -63,11 +48,11 @@ io.sockets.on('connection', function(socket){
 			socket.room = data.room;
 			socket.pid = 2;
 			socket.hash = generateHash(8);
-			games[data.room].player2 = socket;
-			socket.opponent = games[data.room].player1;
-			games[data.room].player1.opponent = socket;
+			game_logic.games[data.room].player2 = socket;
+			socket.opponent = game_logic.games[data.room].player1;
+			game_logic.games[data.room].player1.opponent = socket;
 			socket.emit('assign', {pid: socket.pid, hash: socket.hash});
-			games[data.room].turn = 1;
+			game_logic.games[data.room].turn = 1;
 			socket.broadcast.to(data.room).emit('start');
 		}else{
 			console.log('player 1 is here');
@@ -75,7 +60,7 @@ io.sockets.on('connection', function(socket){
 			socket.room = data.room;
 			socket.pid = 1;
 			socket.hash = generateHash(8);
-			games[data.room] = {
+			game_logic.games[data.room] = {
 				player1: socket,
 				moves: 0,
 				board: [[0,0,0,0,0,0,0],
@@ -89,17 +74,19 @@ io.sockets.on('connection', function(socket){
 		}
 
 		socket.on('makeMove', function(data){
-			if(data.hash = socket.hash && games[socket.room].turn == socket.pid){
-				var move_made = make_move(games[socket.room].board, data.col, socket.pid);
+			if(data.hash = socket.hash && game_logic.games[socket.room].turn == socket.pid){
+				console.log(game_logic.games[socket.room].board);
+				var move_made = game_logic.make_move(socket.room, data.col, socket.pid);
+				console.log(game_logic.games[socket.room].board);
 				if(move_made){
-					games[socket.room].moves = parseInt(games[socket.room].moves)+1;
+					game_logic.games[socket.room].moves = parseInt(game_logic.games[socket.room].moves)+1;
 					socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
-					games[socket.room].turn = socket.opponent.pid;
-					var winner = game_logic.check_for_win(games[socket.room].board);
+					game_logic.games[socket.room].turn = socket.opponent.pid;
+					var winner = game_logic.check_for_win(game_logic.games[socket.room].board);
 					if(winner){
 						io.to(socket.room).emit('winner', {winner: winner});
 					}
-					if(games[socket.room].moves >= 42){
+					if(game_logic.games[socket.room].moves >= 42){
 						io.to(socket.room).emit('draw');
 					}
 				}
@@ -111,8 +98,8 @@ io.sockets.on('connection', function(socket){
 		})
 
 		socket.on('disconnect', function () {
-			if(socket.room in games){
-				delete games[socket.room];
+			if(socket.room in game_logic.games){
+				delete game_logic.games[socket.room];
 				io.to(socket.room).emit('stop');
 				console.log('room closed: '+socket.room);
 			}else{
