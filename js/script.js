@@ -160,11 +160,7 @@ $(function(){
 			$('.status').html(text.nyt);
 		}
 	}
-
-	$('.popover button').click(function(){
-		$('.popover input').select();
-	});
-
+	
 	$('.popover input').click(function(){
 		 $(this).select();
 	});
