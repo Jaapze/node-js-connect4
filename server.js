@@ -38,7 +38,8 @@ io.sockets.on('connection', function(socket){
 
 	socket.on('join', function(data){
 		if(data.room in game_logic.games){
-			if(typeof game_logic.games[data.room].player2 != 'undefined'){
+			var game = game_logic.games[data.room];
+			if(typeof game.player2 != 'undefined'){
 				return;
 			}
 			console.log('player 2 logged on');
@@ -46,11 +47,11 @@ io.sockets.on('connection', function(socket){
 			socket.room = data.room;
 			socket.pid = 2;
 			socket.hash = generateHash(8);
-			game_logic.games[data.room].player2 = socket;
-			socket.opponent = game_logic.games[data.room].player1;
-			game_logic.games[data.room].player1.opponent = socket;
+			game.player2 = socket;
+			socket.opponent = game.player1;
+			game.player1.opponent = socket;
 			socket.emit('assign', {pid: socket.pid, hash: socket.hash});
-			game_logic.games[data.room].turn = 1;
+			game.turn = 1;
 			socket.broadcast.to(data.room).emit('start');
 		}else{
 			console.log('player 1 is here');
@@ -67,22 +68,23 @@ io.sockets.on('connection', function(socket){
 						[0,0,0,0,0,0,0],
 						[0,0,0,0,0,0,0],
 						[0,0,0,0,0,0,0]]
-			}
+			};
 			socket.emit('assign', {pid: socket.pid, hash: socket.hash});
 		}
 
 		socket.on('makeMove', function(data){
-			if(data.hash = socket.hash && game_logic.games[socket.room].turn == socket.pid){
+			var game = game_logic.games[socket.room];
+			if(data.hash = socket.hash && game.turn == socket.pid){
 				var move_made = game_logic.make_move(socket.room, data.col, socket.pid);
 				if(move_made){
-					game_logic.games[socket.room].moves = parseInt(game_logic.games[socket.room].moves)+1;
+					game.moves = parseInt(game.moves)+1;
 					socket.broadcast.to(socket.room).emit('move_made', {pid: socket.pid, col: data.col});
-					game_logic.games[socket.room].turn = socket.opponent.pid;
-					var winner = game_logic.check_for_win(game_logic.games[socket.room].board);
+					game.turn = socket.opponent.pid;
+					var winner = game_logic.check_for_win(game.board);
 					if(winner){
 						io.to(socket.room).emit('winner', {winner: winner});
 					}
-					if(game_logic.games[socket.room].moves >= 42){
+					if(game.moves >= 42){
 						io.to(socket.room).emit('draw');
 					}
 				}
