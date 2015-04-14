@@ -10,5 +10,5 @@ it will run on 127.0.0.1:3000
 
 To start a room go to URL/{6 chars string}
 
-##Demo on Heroku
+##Demo on Heroku.com
 https://nodejs-row4.herokuapp.com/
