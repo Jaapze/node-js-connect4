@@ -17,7 +17,7 @@
     "url": "https://github.com/atticweb/node-js-connect4.git"
   },
   "author": "atticweb",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/atticweb/node-js-connect4/issues"
   },
